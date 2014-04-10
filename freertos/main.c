@@ -194,6 +194,11 @@ void serial_readwrite_task(void *pvParameters)
 	}
 }
 
+void semihosting_log_sysinfo_task(void *pvParameters){
+
+    while(1);
+}
+
 int main()
 {
 	init_led();
@@ -238,6 +243,11 @@ int main()
 	            (signed portCHAR *) "Serial Read/Write",
 	            512 /* stack size */, NULL,
 	            tskIDLE_PRIORITY + 10, NULL);
+
+    /*Create a task to send system information to host*/
+	xTaskCreate(semihosting_log_sysinfo_task,
+	            (signed portCHAR *) "Semihosting log sysinfo",
+	            512 /* stack size */, NULL, tskIDLE_PRIORITY + 2, NULL);
 
 	/* Start running the tasks. */
 	vTaskStartScheduler();

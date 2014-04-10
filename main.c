@@ -105,6 +105,11 @@ void command_prompt(void *pvParameters)
 
 }
 
+void semihosting_log_sysinfo_task(void *pvParameters){
+
+    while(1);
+}
+
 int main()
 {
 	init_rs232();
@@ -126,6 +131,11 @@ int main()
 	/* Create a task to output text read from romfs. */
 	xTaskCreate(command_prompt,
 	            (signed portCHAR *) "Command Prompt",
+	            512 /* stack size */, NULL, tskIDLE_PRIORITY + 2, NULL);
+
+    /*Create a task to send system information to host*/
+	xTaskCreate(semihosting_log_sysinfo_task,
+	            (signed portCHAR *) "Semihosting log sysinfo",
 	            512 /* stack size */, NULL, tskIDLE_PRIORITY + 2, NULL);
 
 	/* Start running the tasks. */
